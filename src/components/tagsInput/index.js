@@ -86,6 +86,9 @@ export default function TagsInput({ ...props }) {
                       label={item}
                       onDelete={handleDelete(item)}
                       size="small"
+                      sx={{
+                        marginRight: "0.3rem",
+                      }}
                     />
                   )),
                   onBlur,
