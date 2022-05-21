@@ -20,7 +20,7 @@ import { Checkbox, Switch } from "@mui/material";
 const FormGroup = styled(Box)`
   display: flex;
   align-items: center;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 `;
 
 const Confirmation = ({ selectedReservation }) => {
