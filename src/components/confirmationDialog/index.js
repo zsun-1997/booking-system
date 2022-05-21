@@ -23,8 +23,8 @@ const FormGroup = styled(Box)`
   margin-top: 1rem;
 `;
 
-const Confirmation = () => {
-  const { selectedReservation, setSelctedReservation } = useAppContext();
+const Confirmation = ({ selectedReservation }) => {
+  const { setSelctedReservation } = useAppContext();
 
   if (!selectedReservation) return null;
 

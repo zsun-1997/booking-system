@@ -10,7 +10,7 @@ import Confirmation from "./components/confirmationDialog";
 function App() {
   const [query, setQuery] = useState("");
 
-  const { filterReservations } = useAppContext();
+  const { filterReservations, selectedReservation } = useAppContext();
 
   const reservations = filterReservations(query);
 
@@ -34,7 +34,7 @@ function App() {
             <ResultTable rows={reservations} />
           </Box>
 
-          <Confirmation />
+          <Confirmation selectedReservation={selectedReservation} />
         </Container>
       </Box>
     </>
