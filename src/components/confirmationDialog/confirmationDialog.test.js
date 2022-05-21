@@ -4,7 +4,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import ConfirmationDialog from "./index";
 import AppContext, { useAppContext } from "../../context/appContext";
 
-test("render date of arrival", () => {
+test("renders all components", () => {
   const AppComp = () => {
     const { reservations } = useAppContext();
 
@@ -109,5 +109,9 @@ test("render date of arrival", () => {
 
   // I confirm the information given above Renders
   el = screen.getByLabelText("I confirm the information given above");
+  expect(el).toBeInTheDocument();
+
+  // Extras Renders
+  el = screen.getByLabelText("Extras");
   expect(el).toBeInTheDocument();
 });

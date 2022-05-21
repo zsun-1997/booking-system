@@ -195,6 +195,24 @@ const Confirmation = ({ selectedReservation }) => {
       </FormGroup>
 
       <FormGroup>
+        <FormControl variant="standard" sx={{ m: 1, width: "180px" }}>
+          <InputLabel id="extras">Extras</InputLabel>
+          <Select
+            labelId="extras"
+            label="Extras"
+            multiple
+            value={selectedReservation?.extras}
+          >
+            {selectedReservation?.extras.map((extra, index) => (
+              <MenuItem key={index} value={extra}>
+                {extra.replace("extra", "")}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </FormGroup>
+
+      <FormGroup>
         <RadioGroup row value={selectedReservation?.payment} sx={{ m: 1 }}>
           <FormControlLabel
             value="cc"
