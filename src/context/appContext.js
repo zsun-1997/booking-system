@@ -1,7 +1,23 @@
 import React, { createContext, useState, useContext } from "react";
+import { BehaviorSubject, map } from "rxjs";
 import data from "../data/reservations.json";
 
+export const state$ = new BehaviorSubject([]);
+
+state$.next(data);
+
+export const stateWithPower$ = state$.pipe(
+  map((data) =>
+    data.map((d) => ({
+      ...d,
+      power: d.lastName + d.firstName,
+    }))
+  )
+);
+
 const AppContext = createContext();
+
+export const useData = () => useContext(AppContext);
 
 const AppContextProvider = ({ children }) => {
   const [state, setState] = useState({
@@ -15,23 +31,6 @@ const AppContextProvider = ({ children }) => {
       ...newState,
     }));
   };
-
-  const filterReservations = (query) => {
-    let reservations = [];
-
-    if (query) {
-      reservations = state.reservations.filter(
-        (reservation) =>
-          reservation.firstName.toLowerCase().includes(query.toLowerCase()) ||
-          reservation.lastName.toLowerCase().includes(query.toLowerCase())
-      );
-    } else {
-      reservations = state.reservations;
-    }
-
-    return reservations;
-  };
-
   const setSelctedReservation = (reservation) => {
     _setState({
       selectedReservation: reservation,
@@ -41,8 +40,8 @@ const AppContextProvider = ({ children }) => {
   const value = {
     reservations: state.reservations,
     selectedReservation: state.selectedReservation,
+    stateWithPower$,
     setSelctedReservation,
-    filterReservations,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useMemo } from "react";
+import { useObservableState } from "observable-hooks";
+import { BehaviorSubject, combineLatestWith, map } from "rxjs";
 import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -8,11 +10,22 @@ import { useAppContext } from "./context/appContext";
 import Confirmation from "./components/confirmationDialog";
 
 function App() {
-  const [query, setQuery] = useState("");
+  const { stateWithPower$ } = useAppContext();
+  const search$ = useMemo(() => new BehaviorSubject(""), []);
 
-  const { filterReservations, selectedReservation } = useAppContext();
-
-  const reservations = filterReservations(query);
+  const [filteredData] = useObservableState(
+    () =>
+      stateWithPower$.pipe(
+        combineLatestWith(search$),
+        map(([data, search]) =>
+          data.filter((d) =>
+            d.power.toLowerCase().includes(search.toLowerCase())
+          )
+        )
+      ),
+    []
+  );
+  const { selectedReservation } = useAppContext();
 
   return (
     <>
@@ -24,14 +37,16 @@ function App() {
         }}
       >
         <Container maxWidth="lg">
-          <SearchBar value={query} onChange={(value) => setQuery(value)} />
-
+          <SearchBar
+            value={search$.value}
+            onChange={(value) => search$.next(value)}
+          />
           <Box
             sx={{
               marginTop: "2em",
             }}
           >
-            <ResultTable rows={reservations} />
+            <ResultTable rows={filteredData} />
           </Box>
 
           <Confirmation selectedReservation={selectedReservation} />
